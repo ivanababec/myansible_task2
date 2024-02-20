@@ -1,0 +1,41 @@
+
+  - name: Disable SELinux
+    selinux:
+      state: disabled
+  - name: Install Apache
+    yum:
+      name: httpd
+      state: latest
+  - name: Start and Enable Apache
+    systemd:
+      name: httpd
+      state: started
+      enabled: yes
+  - name: Download Template
+    get_url:
+      url: https://www.free-css.com/assets/files/free-css-templates/download/page285/a-world.zip
+      dest: /tmp/a-world.zip
+  - name: Install Unzip
+    yum:
+      name: unzip
+      state: latest
+  - name: Extract Template
+    unarchive:
+      src: /tmp/a-world.zip
+      dest: /tmp/
+      remote_src: yes
+  - name: Move Template file to /var/www/html
+    shell: "mv /tmp/html/* /var/www/html/"
+    args:
+      creates: /var/www/html/about.html
+
+
+    
+#  setenforce 0
+#  yum install httpd -y
+#  systemctl start httpd
+#  systemctl enable httpd
+#  curl https://www.free-css.com/assets/files/free-css-templates/download/page296/oxer.zip -o /tmp/oxer.zip
+#  yum install unzip -y 
+#  unzip /tmp/oxer.zip
+#  mv  /tmp/oxer-html/* /var/www/html/
